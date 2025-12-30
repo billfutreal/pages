@@ -44,30 +44,51 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-
     </style>
 </head>
 <body>
 
-    <h1>GET IT IN GEAR - TIME IS RUNNING OUT IN 2025!</h1>
+    <h1 id="headline"></h1>
     <h1>What have you accomplished?<br>What the FUCK you waiting on??</h1>
     <div id="countdown"></div>
 
     <script>
+        function plural(value, word) {
+            return `${value} ${word}${value === 1 ? '' : 's'}`;
+        }
+
+        function updateYearText(year) {
+            document.getElementById('headline').textContent =
+                `GET IT IN GEAR – TIME IS RUNNING OUT IN ${year}!`;
+        }
+
+        let currentYear = new Date().getFullYear();
+        updateYearText(currentYear);
+
         function updateCountdown() {
             const now = new Date();
-            const yearEnd = new Date(now.getFullYear() + 1, 0, 1);
+
+            // Detect New Year rollover
+            if (now.getFullYear() !== currentYear) {
+                currentYear = now.getFullYear();
+                updateYearText(currentYear);
+            }
+
+            // Local midnight Dec 31
+            const yearEnd = new Date(currentYear, 11, 31, 23, 59, 59);
             const timeLeft = yearEnd - now;
 
             const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
+            const seconds = Math.floor((timeLeft / 1000) % 60);
 
-            document.getElementById('countdown').textContent = `${days}d ${hours}h ${minutes}m`;
+            document.getElementById('countdown').textContent =
+                `${plural(days, 'day')} · ${plural(hours, 'hour')} · ${plural(minutes, 'minute')} · ${plural(seconds, 'second')}`;
         }
 
-        setInterval(updateCountdown, 1000);
         updateCountdown();
+        setInterval(updateCountdown, 1000);
     </script>
 
 </body>
