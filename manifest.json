@@ -1,0 +1,13 @@
+{
+  "name": "InGear",
+  "short_name": "InGear",
+  "start_url": "/pages/ingear.html",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "/pages/icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
